@@ -17,6 +17,10 @@ const counterStore = useCounterStore()
 </script>
 
 <template>
+  <hr />
+  <router-view></router-view>
+  <hr />
+  <hr />
   <div>我是App</div>
   <test-demo></test-demo>
   <el-button @click="$router.push('/home')">跳首页</el-button>
