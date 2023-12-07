@@ -23,10 +23,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
-  // server: {
-  //   host: 'localhost',
-  //   port: '8080',
-  //   open: { app: { name: 'Chrome' } },
-  //   https: false
-  // }
 })

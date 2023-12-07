@@ -9,14 +9,14 @@ const router = createRouter({
   routes: [
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
+      path: '/welcome/home',
+      component: () => import('@/views/welcome/welcomePage.vue')
+    }, // 欢迎页面
+    {
       path: '/',
       component: () => import('@/views/layout/LayoutContainer.vue'),
       redirect: '/welcome/home',
       children: [
-        {
-          path: '/welcome/home',
-          component: () => import('@/views/welcome/welcomePage.vue')
-        }, // 欢迎页面
         {
           path: '/echarts/page',
           component: () => import('@/views/echarts/EchartsPage.vue')
