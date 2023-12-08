@@ -32,15 +32,15 @@ const router = createRouter({
         {
           path: 'user/profile',
           component: () => import('@/views/user/UserProfile.vue')
-        }, // 用户信息
+        }, // 管理员信息
         {
           path: 'user/avatar',
           component: () => import('@/views/user/UserAvatar.vue')
-        }, // 用户头像
+        }, // 管理员头像
         {
           path: 'user/password',
           component: () => import('@/views/user/UserPassword.vue')
-        }, // 用户密码（重置）
+        }, // 管理员密码（重置）
         {
           path: 'student/profile',
           component: () => import('@/views/student/StudentProfile.vue')
