@@ -15,40 +15,98 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/views/layout/LayoutContainer.vue'),
+      meta: {
+        title: '',
+        hidden: false,
+        icon: ''
+      },
       redirect: '/welcome/home',
       children: [
         {
-          path: '/echarts/page',
-          component: () => import('@/views/echarts/EchartsPage.vue')
+          path: '/echarts',
+          component: () => import('@/views/echarts/EchartsPage.vue'),
+          meta: {
+            hidden: false,
+            title: '数据可视化',
+            icon: 'DataBoard'
+          }
         }, // echarts图表
         {
-          path: '/works/manage',
-          component: () => import('@/views/works/WorksManage.vue')
+          path: '/manage',
+          component: () => import('@/views/works/WorksManage.vue'),
+          meta: {
+            hidden: false,
+            title: '作品管理',
+            icon: 'Promotion'
+          }
         }, // 作品管理
         {
-          path: '/works/channel',
-          component: () => import('@/views/works/WorksChannel.vue')
+          path: '/channel',
+          component: () => import('@/views/works/WorksChannel.vue'),
+          meta: {
+            hidden: false,
+            title: '频道管理',
+            icon: 'Management'
+          }
         }, // 频道管理（作品的频道）
-        {
-          path: 'user/profile',
-          component: () => import('@/views/user/UserProfile.vue')
-        }, // 管理员信息
-        {
-          path: 'user/avatar',
-          component: () => import('@/views/user/UserAvatar.vue')
-        }, // 管理员头像
-        {
-          path: 'user/password',
-          component: () => import('@/views/user/UserPassword.vue')
-        }, // 管理员密码（重置）
+
         {
           path: 'student/profile',
-          component: () => import('@/views/student/StudentProfile.vue')
+          component: () => import('@/views/student/StudentProfile.vue'),
+          meta: {
+            hidden: false,
+            title: '参赛学生',
+            icon: 'Management'
+          }
         }, // 参赛学生信息
         {
           path: 'teacher/profile',
-          component: () => import('@/views/teacher/TeacherProfile.vue')
+          component: () => import('@/views/teacher/TeacherProfile.vue'),
+          meta: {
+            hidden: false,
+            title: '指导老师',
+            icon: 'List'
+          }
         } // 指导老师信息
+      ]
+    },
+    {
+      path: '/user',
+      component: () => import('@/views/layout/LayoutContainer.vue'),
+      meta: {
+        hidden: false,
+        title: '管理员选项',
+        icon: 'UserFilled'
+      },
+      redirect: '/user/profile',
+      children: [
+        {
+          path: '/user/profile',
+          component: () => import('@/views/user/UserProfile.vue'),
+          meta: {
+            hidden: false,
+            title: '管理员信息',
+            icon: 'User'
+          }
+        }, // 管理员信息
+        {
+          path: '/user/avatar',
+          component: () => import('@/views/user/UserAvatar.vue'),
+          meta: {
+            hidden: false,
+            title: '更换头像',
+            icon: 'Star'
+          }
+        }, // 管理员头像
+        {
+          path: '/user/password',
+          component: () => import('@/views/user/UserPassword.vue'),
+          meta: {
+            hidden: false,
+            title: '管理员密码',
+            icon: 'EditPen'
+          }
+        } // 管理员密码（重置）
       ]
     }
   ]

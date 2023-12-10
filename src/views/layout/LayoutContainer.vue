@@ -1,7 +1,27 @@
 <script setup>
 import avatar from '@/assets/default.png'
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, watch, ref, nextTick } from 'vue'
 import { useLayOutSettingStore } from '@/stores'
+import { useRoute } from 'vue-router'
+// 顶部面包屑
+let $route = useRoute()
+// 刷新功能实现
+let layOutSettingStore = useLayOutSettingStore()
+let flag = ref(true)
+//监听仓库内部数据是否发生变化,如果发生变化，说明用户点击过刷新按钮
+watch(
+  () => layOutSettingStore.refsh,
+  () => {
+    //点击刷新按钮:路由组件销毁
+    flag.value = false
+    nextTick(() => {
+      flag.value = true
+    })
+  }
+)
+const updateRefsh = () => {
+  layOutSettingStore.refsh = !layOutSettingStore.refsh
+}
 // 全屏模式
 const fullScreen = () => {
   let full = document.fullscreenElement
@@ -33,6 +53,7 @@ const changeIcon = () => {
 
 <template>
   <el-container class="layout-container">
+    <!-- 侧边栏 -->
     <el-aside :class="{ fold: LayOutSettingStore.fold ? true : false }">
       <div class="el-aside">
         <div class="el-aside__logo">
@@ -48,19 +69,19 @@ const changeIcon = () => {
         text-color="#fff"
         router
       >
-        <el-menu-item index="/echarts/page">
+        <el-menu-item index="/echarts">
           <el-icon><DataBoard /></el-icon>
           <template #title>
             <span>数据可视化</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/works/manage">
+        <el-menu-item index="/manage">
           <el-icon>
             <Promotion />
           </el-icon>
           <template #title><span>作品管理</span></template>
         </el-menu-item>
-        <el-menu-item index="/works/channel">
+        <el-menu-item index="/channel">
           <el-icon>
             <Management />
           </el-icon>
@@ -81,7 +102,7 @@ const changeIcon = () => {
           </el-menu-item>
           <el-menu-item index="/user/avatar">
             <el-icon>
-              <Crop />
+              <Star />
             </el-icon>
             <span>更换头像</span>
           </el-menu-item>
@@ -118,10 +139,18 @@ const changeIcon = () => {
             ></el-icon>
             <!-- 左侧面包屑 -->
             <el-breadcrumb separator-icon="ArrowRight">
-              <el-breadcrumb-item :to="{ path: '/' }"
-                >管理员选项</el-breadcrumb-item
+              <!-- 动态展示匹配到的路由信息 -->
+              <el-breadcrumb-item
+                v-for="(item, index) in $route.matched"
+                :key="index"
+                v-show="item.meta.title"
+                :to="item.path"
               >
-              <el-breadcrumb-item>管理员信息</el-breadcrumb-item>
+                <el-icon style="margin: 0 5px">
+                  <component :is="item.meta.icon"></component>
+                </el-icon>
+                <span>{{ item.meta.title }}</span>
+              </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="tabber_right">
@@ -182,7 +211,7 @@ const changeIcon = () => {
                   <el-dropdown-item command="profile" :icon="User"
                     >基本资料</el-dropdown-item
                   >
-                  <el-dropdown-item command="avatar" :icon="Crop"
+                  <el-dropdown-item command="avatar" :icon="Star"
                     >更换头像</el-dropdown-item
                   >
                   <el-dropdown-item command="password" :icon="EditPen"
@@ -199,7 +228,12 @@ const changeIcon = () => {
       </el-header>
       <!-- 主要内容区域 -->
       <el-main>
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <transition name="fade">
+            <!-- 渲染layout一级路由组件的子路由 -->
+            <component :is="Component" v-if="flag" />
+          </transition>
+        </router-view>
       </el-main>
       <el-footer>大赛作品管理系统 ©2023-12 Created by husir</el-footer>
     </el-container>
@@ -290,6 +324,20 @@ const changeIcon = () => {
     justify-content: center;
     font-size: 14px;
     color: #666;
+  }
+  // 刷新业务
+  .fade-enter-from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .fade-enter-active {
+    transition: all 0.3s;
+  }
+
+  .fade-enter-to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
