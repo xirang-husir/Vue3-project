@@ -1,19 +1,7 @@
 <script setup>
-import {
-  Management,
-  Promotion,
-  UserFilled,
-  User,
-  Crop,
-  EditPen,
-  Expand,
-  SwitchButton,
-  DataBoard,
-  ArrowDown,
-  List
-} from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { onMounted, onBeforeUnmount } from 'vue'
+import { useLayOutSettingStore } from '@/stores'
 // 全屏模式
 const fullScreen = () => {
   let full = document.fullscreenElement
@@ -36,14 +24,25 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeyPress)
 })
+// 菜单收缩
+let LayOutSettingStore = useLayOutSettingStore()
+const changeIcon = () => {
+  LayOutSettingStore.fold = !LayOutSettingStore.fold
+}
 </script>
 
 <template>
   <el-container class="layout-container">
-    <el-aside width="200px">
-      <div class="el-aside__logo"></div>
+    <el-aside :class="{ fold: LayOutSettingStore.fold ? true : false }">
+      <div class="el-aside">
+        <div class="el-aside__logo">
+          <img src="@/assets/layout-logo-1.png" alt="Logo" />
+          <div class="text">大赛作品管理系统</div>
+        </div>
+      </div>
       <el-menu
-        active-text-color="#ffd04b"
+        :collapse="LayOutSettingStore.fold ? true : false"
+        active-text-color="yellowgreen"
         background-color="#232323"
         :default-active="$route.path"
         text-color="#fff"
@@ -51,19 +50,21 @@ onBeforeUnmount(() => {
       >
         <el-menu-item index="/echarts/page">
           <el-icon><DataBoard /></el-icon>
-          <span>数据可视化</span>
+          <template #title>
+            <span>数据可视化</span>
+          </template>
         </el-menu-item>
         <el-menu-item index="/works/manage">
           <el-icon>
             <Promotion />
           </el-icon>
-          <span>作品管理</span>
+          <template #title><span>作品管理</span></template>
         </el-menu-item>
         <el-menu-item index="/works/channel">
           <el-icon>
             <Management />
           </el-icon>
-          <span>频道管理</span>
+          <template #title><span>频道管理</span></template>
         </el-menu-item>
         <el-sub-menu index="/user">
           <template #title>
@@ -95,11 +96,11 @@ onBeforeUnmount(() => {
           <el-icon>
             <Management />
           </el-icon>
-          <span>参赛学生信息</span>
+          <template #title><span>参赛学生信息</span></template>
         </el-menu-item>
         <el-menu-item index="/teacher/profile">
           <el-icon><List /></el-icon>
-          <span>指导老师信息</span>
+          <template #title><span>指导老师信息</span></template>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -110,7 +111,11 @@ onBeforeUnmount(() => {
         <div class="tabber">
           <div class="tabber_left">
             <!-- 顶部左侧 -->
-            <el-icon style="margin-right: 10px"><Expand /></el-icon>
+            <el-icon style="margin-right: 10px" @click="changeIcon"
+              ><component
+                :is="LayOutSettingStore.fold ? 'Fold' : 'Expand'"
+              ></component
+            ></el-icon>
             <!-- 左侧面包屑 -->
             <el-breadcrumb separator-icon="ArrowRight">
               <el-breadcrumb-item :to="{ path: '/' }"
@@ -204,20 +209,41 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .layout-container {
   height: 100vh;
-
+  // 左侧菜单栏
   .el-aside {
-    background-color: #232323;
-    // background-color: #999;
-
+    width: 200px;
+    // background-color: #232323;
+    background-color: #001529;
+    transition: all 0.4s;
+    overflow: hidden;
     &__logo {
-      height: 120px;
-      // background: url('@/assets/login-bg-1.png') no-repeat center / 120px auto;
+      display: flex;
+      align-items: center;
+      padding-left: 5px;
+      margin-top: 10px;
     }
 
+    &__logo img {
+      height: 50px;
+      width: 45px;
+    }
+    &__logo .text {
+      margin-left: 10px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    &.fold {
+      width: 49px;
+      overflow: hidden; // 添加overflow: hidden;以避免在折叠时出现滚动条
+      transition: all 0.4s; // 添加过渡动画
+    }
     .el-menu {
       border-right: none;
+      background-color: #001529;
     }
   }
+  // 顶部导航栏
   .el-header {
     background-color: #fff;
     display: flex;
@@ -257,6 +283,7 @@ onBeforeUnmount(() => {
       margin-left: 20px;
     }
   }
+  // 底部
   .el-footer {
     display: flex;
     align-items: center;

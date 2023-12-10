@@ -13,3 +13,4 @@ export default pinia
 // 统一导出
 export * from './modules/user'
 export * from './modules/counter'
+export * from './modules/setting'
