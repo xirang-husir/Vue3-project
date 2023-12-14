@@ -1,7 +1,8 @@
 <script setup>
+import CryptoJS from 'crypto-js'
 import { userRegisterService, userLoginService } from '@/api/user.js'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 const isRegister = ref(false)
@@ -50,14 +51,43 @@ const register = async () => {
 }
 const userStore = useUserStore()
 const router = useRouter()
+const rememberMe = ref(false)
 // 登录成功之前预校验
 const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
   userStore.setToken(res.data.token)
+  // 如果用户选中了记住密码，将加密后的用户名和密码存储到localStorage
+  if (rememberMe.value) {
+    localStorage.setItem('rememberMe', 'true')
+    localStorage.setItem('username', formModel.value.username)
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      formModel.value.password,
+      'secret key 123'
+    ).toString()
+    localStorage.setItem('password', encryptedPassword)
+  } else {
+    // 如果用户没有选择记住密码，清除localStorage中的信息
+    localStorage.removeItem('rememberMe')
+    localStorage.removeItem('username')
+    localStorage.removeItem('password')
+  }
   ElMessage.success('登录成功')
   router.push('/echarts/page')
 }
+// 记住密码
+onMounted(() => {
+  if (localStorage.getItem('rememberMe') === 'true') {
+    formModel.value.username = localStorage.getItem('username')
+    const encryptedPassword = localStorage.getItem('password')
+    if (encryptedPassword) {
+      const bytes = CryptoJS.AES.decrypt(encryptedPassword, 'secret key 123')
+      const originalPassword = bytes.toString(CryptoJS.enc.Utf8)
+      formModel.value.password = originalPassword
+    }
+    rememberMe.value = true
+  }
+})
 // 切换时重置表单内容
 watch(isRegister, () => {
   formModel.value = {
@@ -153,7 +183,7 @@ watch(isRegister, () => {
         </el-form-item>
         <el-form-item class="flex">
           <div class="flex">
-            <el-checkbox>记住我</el-checkbox>
+            <el-checkbox v-model="rememberMe">记住密码</el-checkbox>
             <el-link type="primary" :underline="false">忘记密码？</el-link>
           </div>
         </el-form-item>

@@ -23,7 +23,7 @@ const router = createRouter({
       redirect: '/welcome/home',
       children: [
         {
-          path: '/echarts',
+          path: '/echarts/page',
           component: () => import('@/views/echarts/EchartsPage.vue'),
           meta: {
             hidden: false,
@@ -70,6 +70,7 @@ const router = createRouter({
         } // 指导老师信息
       ]
     },
+    // 管理员选项
     {
       path: '/user',
       component: () => import('@/views/layout/LayoutContainer.vue'),

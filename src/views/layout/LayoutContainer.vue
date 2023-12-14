@@ -1,6 +1,6 @@
 <script setup>
 import avatar from '@/assets/default.png'
-import { onMounted, onBeforeUnmount, watch, ref, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useLayOutSettingStore } from '@/stores'
 import { useRoute } from 'vue-router'
 // 顶部面包屑
@@ -8,6 +8,8 @@ let $route = useRoute()
 // 刷新功能实现
 let layOutSettingStore = useLayOutSettingStore()
 let flag = ref(true)
+//收集开关的数据
+const dark = ref(true)
 //监听仓库内部数据是否发生变化,如果发生变化，说明用户点击过刷新按钮
 watch(
   () => layOutSettingStore.refsh,
@@ -49,6 +51,42 @@ let LayOutSettingStore = useLayOutSettingStore()
 const changeIcon = () => {
   LayOutSettingStore.fold = !LayOutSettingStore.fold
 }
+// 系统设置（主题颜色与暗黑模式）
+const drawer = ref(false)
+// 主题颜色
+const color = ref('rgba(255, 69, 0, 0.68)')
+const predefineColors = ref([
+  '#ff4500',
+  '#ff8c00',
+  '#ffd700',
+  '#90ee90',
+  '#00ced1',
+  '#1e90ff',
+  '#c71585',
+  'rgba(255, 69, 0, 0.68)',
+  'rgb(255, 120, 0)',
+  'hsv(51, 100, 98)',
+  'hsva(120, 40, 94, 0.5)',
+  'hsl(181, 100%, 37%)',
+  'hsla(209, 100%, 56%, 0.73)',
+  '#c7158577'
+])
+
+//进行暗黑模式的切换
+const changeDark = () => {
+  //获取HTML根节点
+  let html = document.documentElement
+  //判断HTML标签是否有类名dark
+  dark.value ? (html.className = 'dark') : (html.className = '')
+}
+
+//主题颜色的设置
+const setColor = () => {
+  //通知js修改根节点的样式对象的属性与属性值
+  const html = document.documentElement
+  html.style.setProperty('--el-color-primary', color.value)
+  html.style.setProperty('el-button', color.value)
+}
 </script>
 
 <template>
@@ -69,7 +107,7 @@ const changeIcon = () => {
         text-color="#fff"
         router
       >
-        <el-menu-item index="/echarts">
+        <el-menu-item index="/echarts/page">
           <el-icon><DataBoard /></el-icon>
           <template #title>
             <span>数据可视化</span>
@@ -155,35 +193,41 @@ const changeIcon = () => {
           </div>
           <div class="tabber_right">
             <!-- 右侧的按钮区域 -->
+            <!-- 刷新 -->
             <el-button
               size="small"
               icon="Refresh"
               circle
               @click="updateRefsh"
             ></el-button>
+            <!-- 全屏 -->
             <el-button
               size="small"
               icon="FullScreen"
               circle
               @click="fullScreen"
             ></el-button>
-            <el-popover
-              placement="bottom"
-              title="主题设置"
-              :width="300"
-              trigger="hover"
+            <!-- 主题设置的抽屉 -->
+            <el-button
+              size="small"
+              icon="Setting"
+              circle
+              @click="drawer = true"
+            ></el-button>
+            <el-drawer
+              v-model="drawer"
+              title="I am the title"
+              :with-header="false"
             >
-              <!-- 系统设置 -->
               <el-form>
-                <el-form-item label="主题颜色">
-                  <el-color-picker
+                <el-form-item label="主题颜色"
+                  ><el-color-picker
                     @change="setColor"
                     v-model="color"
-                    size="small"
                     show-alpha
                     :predefine="predefineColors"
-                  />
-                </el-form-item>
+                    size="big"
+                /></el-form-item>
                 <el-form-item label="暗黑模式">
                   <el-switch
                     @change="changeDark"
@@ -193,13 +237,11 @@ const changeIcon = () => {
                     inline-prompt
                     active-icon="MoonNight"
                     inactive-icon="Sunny"
+                    size="big"
                   />
                 </el-form-item>
               </el-form>
-              <template #reference>
-                <el-button size="small" icon="Setting" circle></el-button>
-              </template>
-            </el-popover>
+            </el-drawer>
             <span style="margin: 10px">管理员：<strong>husir</strong></span>
             <el-dropdown placement="bottom-end">
               <span class="el-dropdown__box">
@@ -208,16 +250,16 @@ const changeIcon = () => {
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="profile" :icon="User"
+                  <el-dropdown-item command="profile" icon="User"
                     >基本资料</el-dropdown-item
                   >
-                  <el-dropdown-item command="avatar" :icon="Star"
+                  <el-dropdown-item command="avatar" icon="Star"
                     >更换头像</el-dropdown-item
                   >
-                  <el-dropdown-item command="password" :icon="EditPen"
+                  <el-dropdown-item command="password" icon="EditPen"
                     >重置密码</el-dropdown-item
                   >
-                  <el-dropdown-item command="logout" :icon="SwitchButton"
+                  <el-dropdown-item command="logout" icon="SwitchButton"
                     >退出登录</el-dropdown-item
                   >
                 </el-dropdown-menu>
@@ -279,7 +321,6 @@ const changeIcon = () => {
   }
   // 顶部导航栏
   .el-header {
-    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -315,6 +356,23 @@ const changeIcon = () => {
       display: flex;
       align-items: center;
       margin-left: 20px;
+    }
+    // 添加针对 'dark' 类的样式定义
+    &.dark {
+      .el-header {
+        background-color: #333; // 修改为暗黑模式的颜色
+        color: #fff; // 修改为暗黑模式的颜色
+      }
+
+      .el-main {
+        background-color: #222; // 修改为暗黑模式的颜色
+        color: #fff; // 修改为暗黑模式的颜色
+      }
+
+      .el-footer {
+        background-color: #333; // 修改为暗黑模式的颜色
+        color: #fff; // 修改为暗黑模式的颜色
+      }
     }
   }
   // 底部
