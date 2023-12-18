@@ -1,15 +1,19 @@
 <script setup>
 import avatar from '@/assets/default.png'
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
-import { useLayOutSettingStore } from '@/stores'
+import { useLayOutSettingStore, useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+// 管理员信息渲染
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.getUser()
+})
 // 顶部面包屑
 let $route = useRoute()
 // 刷新功能实现
 let layOutSettingStore = useLayOutSettingStore()
 let flag = ref(true)
-//收集开关的数据
-const dark = ref(true)
 //监听仓库内部数据是否发生变化,如果发生变化，说明用户点击过刷新按钮
 watch(
   () => layOutSettingStore.refsh,
@@ -53,8 +57,17 @@ const changeIcon = () => {
 }
 // 系统设置（主题颜色与暗黑模式）
 const drawer = ref(false)
+
+//进行暗黑模式的切换
+const dark = ref(false)
+const changeDark = () => {
+  //获取HTML根节点
+  let html = document.documentElement
+  //判断HTML标签是否有类名dark
+  dark.value ? (html.className = 'dark') : (html.className = '')
+}
 // 主题颜色
-const color = ref('rgba(255, 69, 0, 0.68)')
+const color = ref('')
 const predefineColors = ref([
   '#ff4500',
   '#ff8c00',
@@ -71,21 +84,30 @@ const predefineColors = ref([
   'hsla(209, 100%, 56%, 0.73)',
   '#c7158577'
 ])
-
-//进行暗黑模式的切换
-const changeDark = () => {
-  //获取HTML根节点
-  let html = document.documentElement
-  //判断HTML标签是否有类名dark
-  dark.value ? (html.className = 'dark') : (html.className = '')
-}
-
 //主题颜色的设置
 const setColor = () => {
   //通知js修改根节点的样式对象的属性与属性值
   const html = document.documentElement
   html.style.setProperty('--el-color-primary', color.value)
-  html.style.setProperty('el-button', color.value)
+  html.style.setProperty('--el-button-bg-color', color.value)
+  html.style.setProperty('--el-button-primary-border-color', color.value)
+}
+const router = useRouter()
+const handleCommand = async (key) => {
+  if (key === 'logout') {
+    // 退出操作
+    await ElMessageBox.confirm('你确认要进行退出么', '温馨提示', {
+      type: 'warning',
+      confirmButtonText: '确认',
+      cancelButtonText: '取消'
+    })
+
+    userStore.removeToken()
+    userStore.setUser()
+    router.push('/login')
+  } else {
+    router.push(`/user/${key}`)
+  }
 }
 </script>
 
@@ -140,7 +162,7 @@ const setColor = () => {
           </el-menu-item>
           <el-menu-item index="/user/avatar">
             <el-icon>
-              <Star />
+              <Crop />
             </el-icon>
             <span>更换头像</span>
           </el-menu-item>
@@ -168,6 +190,7 @@ const setColor = () => {
       <!-- 顶部导航栏 -->
       <el-header>
         <div class="tabber">
+          <!-- 左侧按钮区域 -->
           <div class="tabber_left">
             <!-- 顶部左侧 -->
             <el-icon style="margin-right: 10px" @click="changeIcon"
@@ -191,8 +214,8 @@ const setColor = () => {
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
+          <!-- 右侧的按钮区域 -->
           <div class="tabber_right">
-            <!-- 右侧的按钮区域 -->
             <!-- 刷新 -->
             <el-button
               size="small"
@@ -207,13 +230,14 @@ const setColor = () => {
               circle
               @click="fullScreen"
             ></el-button>
-            <!-- 主题设置的抽屉 -->
+            <!-- 设置按钮 -->
             <el-button
               size="small"
               icon="Setting"
               circle
               @click="drawer = true"
             ></el-button>
+            <!-- 主题设置的抽屉 -->
             <el-drawer
               v-model="drawer"
               title="I am the title"
@@ -242,10 +266,16 @@ const setColor = () => {
                 </el-form-item>
               </el-form>
             </el-drawer>
-            <span style="margin: 10px">管理员：<strong>husir</strong></span>
-            <el-dropdown placement="bottom-end">
+            <!-- 管理员头像与昵称 -->
+            <span style="margin: 10px"
+              >管理员：<strong>{{
+                userStore.user.nickname || userStore.user.username
+              }}</strong></span
+            >
+            <!-- 管理员下拉选项 -->
+            <el-dropdown placement="bottom-end" @command="handleCommand">
               <span class="el-dropdown__box">
-                <el-avatar :src="avatar" />
+                <el-avatar :src="userStore.user.user_pic || avatar" />
                 <el-icon><ArrowDown /></el-icon>
               </span>
               <template #dropdown>
@@ -253,7 +283,7 @@ const setColor = () => {
                   <el-dropdown-item command="profile" icon="User"
                     >基本资料</el-dropdown-item
                   >
-                  <el-dropdown-item command="avatar" icon="Star"
+                  <el-dropdown-item command="avatar" icon="Crop"
                     >更换头像</el-dropdown-item
                   >
                   <el-dropdown-item command="password" icon="EditPen"
