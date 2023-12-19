@@ -12,5 +12,5 @@ export default pinia
 // export { useCounterStore }
 // 统一导出
 export * from './modules/user'
-export * from './modules/counter'
 export * from './modules/setting'
+export * from './modules/categories'

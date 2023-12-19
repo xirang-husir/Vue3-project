@@ -33,20 +33,20 @@ const router = createRouter({
           }
         }, // echarts图表
         {
+          path: '/channel',
+          component: () => import('@/views/works/WorksChannel.vue'),
+          meta: {
+            hidden: false,
+            title: '作品频道',
+            icon: 'Promotion'
+          }
+        }, // 作品管理
+        {
           path: '/manage',
           component: () => import('@/views/works/WorksManage.vue'),
           meta: {
             hidden: false,
             title: '作品管理',
-            icon: 'Promotion'
-          }
-        }, // 作品管理
-        {
-          path: '/channel',
-          component: () => import('@/views/works/WorksChannel.vue'),
-          meta: {
-            hidden: false,
-            title: '频道管理',
             icon: 'Management'
           }
         }, // 频道管理（作品的频道）

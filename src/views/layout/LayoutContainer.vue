@@ -135,17 +135,17 @@ const handleCommand = async (key) => {
             <span>数据可视化</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/manage">
+        <el-menu-item index="/channel">
           <el-icon>
             <Promotion />
           </el-icon>
-          <template #title><span>作品管理</span></template>
+          <template #title><span>作品频道</span></template>
         </el-menu-item>
-        <el-menu-item index="/channel">
+        <el-menu-item index="/manage">
           <el-icon>
             <Management />
           </el-icon>
-          <template #title><span>频道管理</span></template>
+          <template #title><span>作品管理</span></template>
         </el-menu-item>
         <el-sub-menu index="/user">
           <template #title>
