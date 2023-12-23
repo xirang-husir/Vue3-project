@@ -7,7 +7,7 @@ export const useStudentStore = defineStore('student', {
         name: '张三',
         studentId: '201811111111',
         username: 'zhangsan',
-        grade: '点计2021',
+        grade: '电计2021',
         major: '电子与计算机工程',
         education: '本科',
         email: '1213770427@qq.com',

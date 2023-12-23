@@ -51,14 +51,6 @@ onUnmounted(() => {
   font-weight: 400;
   text-align: center;
 }
-/* .welcome-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column;
-  text-align: center;
-} */
 
 .welcome-page h2 {
   font-size: 24px;

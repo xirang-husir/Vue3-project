@@ -227,18 +227,19 @@ const sureEditParticipants = () => {
   })
   cancelEditParticipants()
 }
+
 const deleteCategoryStudentHandler = (index) => {
   console.log(index)
   editParticipantsDialogData.value.workStudentGroup.splice(index, 1)
 }
-const deleteCategoryTeacherHandler = (index) => {
-  console.log(index)
-  editParticipantsDialogData.value.workTeacherGroup.splice(index, 1)
-}
+// const deleteCategoryTeacherHandler = (index) => {
+//   console.log(index)
+//   editParticipantsDialogData.value.workTeacherGroup.splice(index, 1)
+// }
 
 const innerVisibleStudent = ref(false)
 const innerVisibleTeacher = ref(false)
-
+// 选择学生
 const selectStudentDialog = () => {
   console.log(addDialogData.value.workStudentGroup1)
   addDialogData.value.workStudentGroup1.forEach((item) => {
@@ -254,6 +255,7 @@ const selectStudentDialog = () => {
   })
   innerVisibleStudent.value = false
 }
+// 选择老师
 const selectTeacherDialog = () => {
   console.log(addDialogData.value.workTeacherGroup1)
   addDialogData.value.workTeacherGroup1.forEach((item) => {
@@ -286,6 +288,7 @@ const addInnerTeacher = () => {
     )
   innerVisibleTeacher.value = true
 }
+// 详情查看
 const detailParticipantsDialogVisible = ref(false)
 const viewDetails = (row) => {
   detailParticipantsDialogVisible.value = true
@@ -303,9 +306,9 @@ const editWorkDialog = (row) => {
   addDialogData.value.workTeacherGroup1 = row.workTeacherGroup.map(
     (item) => item.employeeId
   )
-  console.log(addDialogData.value)
+  // console.log(addDialogData.value)
 }
-
+// 富文本编辑器
 const onRichText = (value) => {
   console.log(value)
   addDialogData.value.workDescription = value
@@ -330,7 +333,7 @@ const onRichText = (value) => {
             size="middle"
             style="margin-right: 80px"
             @click="showAddWorkDialog"
-            >添加分类</el-button
+            >添加作品</el-button
           >
         </el-col>
       </el-row>

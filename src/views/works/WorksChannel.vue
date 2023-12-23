@@ -33,11 +33,7 @@ const { pagination, paginatedData, pageCount } = usePagination(
 watch(filteredCategories, () => {
   pagination.value.currentPage = 1
 })
-// 添加分类
-const addCategory = () => {
-  titleTip.value = '新增作品类别'
-  dialogVisible.value = true
-}
+
 const handleClose = () => {
   editDialogData.value = {
     category_name: '',
@@ -59,23 +55,6 @@ const handleClose = () => {
 }
 
 const dialogVisible = ref(false)
-// 编辑分类
-const editDialogData = ref({
-  category_name: '',
-  subcategory_name: [],
-  subcategory_name_tag: '',
-  player_limit: [],
-  player_limit1: '',
-  player_limit2: '',
-  teacher_limit: '',
-  qualify_limit: {
-    limit: '',
-    limitType: {
-      subType: [],
-      limit: ''
-    }
-  }
-})
 
 const closeTag = (index) => {
   editDialogData.value.subcategory_name.splice(index, 1)
@@ -121,6 +100,23 @@ const deleteCategoryHandler = (index) => {
   }, 500)
 }
 const titleTip = ref('新增作品类别')
+// 编辑分类
+const editDialogData = ref({
+  category_name: '',
+  subcategory_name: [],
+  subcategory_name_tag: '',
+  player_limit: [],
+  player_limit1: '',
+  player_limit2: '',
+  teacher_limit: '',
+  qualify_limit: {
+    limit: '',
+    limitType: {
+      subType: [],
+      limit: ''
+    }
+  }
+})
 const editCategoryHandler = (row, index) => {
   titleTip.value = '编辑作品类别'
   console.log(row.qualify_limit, index)
@@ -141,7 +137,11 @@ const editCategoryHandler = (row, index) => {
   }
   dialogVisible.value = true
 }
-
+// 添加分类
+const addCategory = () => {
+  titleTip.value = '新增作品类别'
+  dialogVisible.value = true
+}
 const sure = () => {
   editDialogData.value.player_limit = [
     editDialogData.value.player_limit1,

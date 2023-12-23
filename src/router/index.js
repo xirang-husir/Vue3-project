@@ -49,7 +49,7 @@ const router = createRouter({
             title: '作品管理',
             icon: 'Management'
           }
-        }, // 频道管理（作品的频道）
+        }, // 频道管理（作品的分类）
 
         {
           path: 'student/profile',

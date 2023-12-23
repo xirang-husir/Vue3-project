@@ -29,7 +29,7 @@ onMounted(() => {
 // 分页逻辑调用
 const { pagination, paginatedData, pageCount } = usePagination(
   teacherListResult,
-  4
+  8
 )
 // 监听，模糊搜索时重置分页
 watch(teacherListResult, () => {
@@ -147,7 +147,7 @@ const teacherDetail = (row) => {
             size="middle"
             style="margin-right: 80px"
             @click="addTeacher"
-            >添加分类</el-button
+            >新增教师</el-button
           >
         </el-col>
       </el-row>
@@ -166,7 +166,9 @@ const teacherDetail = (row) => {
       </el-table-column>
       <el-table-column label="操作" width="260">
         <template v-slot="{ row }">
-          <el-button size="small" @click="teacherDetail(row)">详情</el-button>
+          <el-button type="primary" size="small" @click="teacherDetail(row)"
+            >详情</el-button
+          >
           <el-button size="small" @click="editTeacher(row)">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteTeacher(row)"
             >删除</el-button

@@ -29,7 +29,7 @@ onMounted(() => {
 // 分页逻辑调用
 const { pagination, paginatedData, pageCount } = usePagination(
   studentListResult,
-  4
+  8
 )
 // 监听，模糊搜索时重置分页
 watch(studentListResult, () => {
@@ -150,7 +150,7 @@ const studentDetail = (row) => {
             size="middle"
             style="margin-right: 80px"
             @click="addStudent"
-            >添加分类</el-button
+            >新增学生</el-button
           >
         </el-col>
       </el-row>
@@ -164,7 +164,9 @@ const studentDetail = (row) => {
       <el-table-column prop="education" label="学历" align="center" />
       <el-table-column label="操作" width="220">
         <template v-slot="{ row, $index }">
-          <el-button size="small" @click="studentDetail(row)">详情</el-button>
+          <el-button type="primary" size="small" @click="studentDetail(row)"
+            >详情</el-button
+          >
           <el-button size="small" @click="editStudent(row)">编辑</el-button>
           <el-button
             size="small"
