@@ -325,7 +325,7 @@ const handleCommand = async (key) => {
     &__logo {
       display: flex;
       align-items: center;
-      padding-left: 5px;
+      padding-left: 3px;
       margin-top: 10px;
     }
 

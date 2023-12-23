@@ -13,11 +13,16 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@vueup/vue-quill": "^1.0.0-alpha.40",
     "axios": "^1.6.2",
+    "compressorjs": "^1.2.1",
     "crypto-js": "^4.2.0",
+    "echarts": "^5.4.3",
     "element-plus": "^2.4.3",
     "pinia": "^2.1.7",
+    "quill-image-resize-module": "^3.0.0",
     "vue": "^3.3.4",
+    "vue-echarts": "^6.6.5",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

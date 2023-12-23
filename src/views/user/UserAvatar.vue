@@ -13,6 +13,7 @@ const onSelectFile = (uploadFile) => {
   reader.readAsDataURL(uploadFile.raw)
   reader.onload = () => {
     imgUrl.value = reader.result
+    console.log(imgUrl.value)
   }
 }
 

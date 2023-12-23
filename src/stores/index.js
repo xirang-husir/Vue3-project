@@ -14,3 +14,7 @@ export default pinia
 export * from './modules/user'
 export * from './modules/setting'
 export * from './modules/categories'
+export * from './modules/manage'
+export * from './modules/student'
+export * from './modules/teacher'
+export * from './modules/pagination'
