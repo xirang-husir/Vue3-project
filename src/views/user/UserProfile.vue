@@ -1,9 +1,15 @@
 <script setup>
 import PageContainer from '@/components/PageContainer.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores'
 import { userUpdateInfoService } from '@/api/user'
-
+const loading = ref(true)
+// 模拟加载效果
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false
+  }, 750)
+})
 const formRef = ref()
 
 const {
@@ -49,7 +55,7 @@ const submitForm = async () => {
 }
 </script>
 <template>
-  <page-container title="管理员基本资料">
+  <page-container v-loading="loading" title="管理员基本资料">
     <!-- 表单部分 -->
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="登录名称">

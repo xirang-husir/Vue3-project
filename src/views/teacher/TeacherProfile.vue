@@ -176,7 +176,7 @@ const teacherDetail = (row) => {
         </template>
       </el-table-column>
       <template #empty>
-        <el-empty description="没有这里暂时空空如也"></el-empty>
+        <el-empty description="这里暂时空空如也"></el-empty>
       </template>
     </el-table>
   </page-container>

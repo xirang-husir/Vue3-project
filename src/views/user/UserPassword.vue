@@ -1,9 +1,16 @@
 <script setup>
 import PageContainer from '@/components/PageContainer.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { userUpdatePasswordService } from '@/api/user'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+const loading = ref(true)
+// 模拟加载效果
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false
+  }, 750)
+})
 
 // 表单ref定义
 const pwdFormRef = ref(null)
@@ -85,7 +92,7 @@ const resetForm = () => {
 }
 </script>
 <template>
-  <page-container title="修改密码">
+  <page-container v-loading="loading" title="修改密码">
     <el-form
       :model="pwdForm"
       :rules="rules"

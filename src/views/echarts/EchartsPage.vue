@@ -8,6 +8,13 @@ import {
   useCategoriesStore
 } from '@/stores'
 import { ref } from 'vue'
+const loading = ref(true)
+// 模拟加载效果
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false
+  }, 750)
+})
 //声明周期函数，自动执行初始化
 onMounted(() => {
   init()
@@ -99,7 +106,7 @@ function init() {
 </script>
 
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" v-loading="loading">
     <div class="boxList">
       <div class="boxSize" style="background-color: #c68673">
         <div>当前作品总数</div>

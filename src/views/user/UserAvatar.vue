@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores'
 import { userUpdateAvatarService } from '@/api/user'
 const userStore = useUserStore()
@@ -25,10 +25,17 @@ const onUpdateAvatar = async () => {
   // 提示用户
   ElMessage.success('头像更新成功')
 }
+const loading = ref(true)
+// 模拟加载效果
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false
+  }, 750)
+})
 </script>
 
 <template>
-  <page-container title="更换头像">
+  <page-container v-loading="loading" title="更换头像">
     <el-upload
       ref="uploadRef"
       :auto-upload="false"
