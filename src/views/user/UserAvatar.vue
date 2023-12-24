@@ -24,7 +24,6 @@ const onUpdateAvatar = async () => {
   await userStore.getUser()
   // 提示用户
   ElMessage.success('头像更新成功')
-  console.log('头像更新成功')
 }
 
 const loading = ref(true)
