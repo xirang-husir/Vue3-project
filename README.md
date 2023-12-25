@@ -2,6 +2,7 @@
 # Vue3-competition-work
 
 This template should help get you started developing with Vue 3 in Vite.
+本项目使用的技术栈：使用了ES6+vue3+pinia+vue-router4 +vite +axios +element-plus+Echarts
 
 ## Recommended IDE Setup
 
