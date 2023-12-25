@@ -9,7 +9,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default () =>
   defineConfig({
-    base: './',
+    base: '/Vue3-project.github.io/',
     plugins: [
       vue(),
       // 配置element plus 自动按需导入（默认components 下的文件也会被自动注册）
