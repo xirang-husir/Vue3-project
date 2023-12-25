@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores'
 // 2.hash模式：createWebHashHistory 地址栏带 #
 const router = createRouter({
   // import.meta.env.BASE_URL: vite中的环境变量，就是vite.config.js中的base 配置项
-  // history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
