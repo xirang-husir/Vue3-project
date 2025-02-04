@@ -33,7 +33,3 @@ pnpm build
 ```sh
 pnpm lint
 ```
-=======
-# Vue3-project
-大赛后台管理系统
->>>>>>> 855fa9fbae581ef8faf95295faf906c3502a2db5
